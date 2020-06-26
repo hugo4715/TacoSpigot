@@ -1,0 +1,38 @@
+From 274feb65ce77d62a69127654fc19f2b2fcfa184b Mon Sep 17 00:00:00 2001
+From: hugo4715 <deniauhugo@gmail.com>
+Date: Fri, 26 Jun 2020 23:55:51 +0200
+Subject: [PATCH] Skip EntityTNTPrimed motion calculation if fixCannons is true
+
+
+diff --git a/src/main/java/net/minecraft/server/EntityTNTPrimed.java b/src/main/java/net/minecraft/server/EntityTNTPrimed.java
+index 872d9659..b3df010a 100644
+--- a/src/main/java/net/minecraft/server/EntityTNTPrimed.java
++++ b/src/main/java/net/minecraft/server/EntityTNTPrimed.java
+@@ -27,17 +27,20 @@ public class EntityTNTPrimed extends Entity {
+     public EntityTNTPrimed(org.bukkit.Location loc, World world, double d0, double d1, double d2, EntityLiving entityliving) {
+         this(loc, world);
+         this.setPosition(d0, d1, d2);
+-        float f = (float) (Math.random() * 3.1415927410125732D * 2.0D);
+ 
+-        this.motX = (double) (-((float) Math.sin((double) f)) * 0.02F);
+         this.motY = 0.20000000298023224D;
+-        this.motZ = (double) (-((float) Math.cos((double) f)) * 0.02F);
+         this.fuseTicks = 80;
+         this.lastX = d0;
+         this.lastY = d1;
+         this.lastZ = d2;
+         this.source = entityliving;
+-        if (world.paperSpigotConfig.fixCannons) this.motX = this.motZ = 0.0F; // PaperSpigot - Fix cannons
++        if (world.paperSpigotConfig.fixCannons) { // PaperSpigot - Fix cannons
++            this.motX = this.motZ = 0.0F;
++        }else{
++            float f = (float) (Math.random() * 3.1415927410125732D * 2.0D);
++            this.motX = (double) (-((float) Math.sin((double) f)) * 0.02F);
++            this.motZ = (double) (-((float) Math.cos((double) f)) * 0.02F);
++        }
+     }
+ 
+     protected void h() {}
+-- 
+2.23.0.windows.1
+
